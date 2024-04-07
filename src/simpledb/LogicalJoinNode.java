@@ -55,7 +55,7 @@ public class LogicalJoinNode {
     }
     
     @Override public String toString() {
-        return t1 + ":" + t2 ;//+ ";" + f1 + " " + p + " " + f2;
+        return t1 + ":" + t2 + ";" + f1 + " " + p + " " + f2;
     }
     
     @Override public int hashCode() {

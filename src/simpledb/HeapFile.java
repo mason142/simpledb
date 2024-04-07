@@ -56,7 +56,9 @@ public class HeapFile implements DbFile {
     public TupleDesc getTupleDesc() {
     	return td;
     }
-
+	public int getNumTuplesPerPage() {
+		return (int) Math.floor((BufferPool.PAGE_SIZE * 8) / (this.td.getSize() * 8 + 1));
+	}
     // see DbFile.java for javadocs
     public Page readPage(PageId pid) {
     	if(pid == null)

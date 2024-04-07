@@ -57,7 +57,7 @@ public class SystemTestUtil {
             tuples = new ArrayList<ArrayList<Integer>>(rows);
         }
 
-        Random r = new Random();
+        Random r = new Random(42);
 
         // Fill the tuples list with generated values
         for (int i = 0; i < rows; ++i) {

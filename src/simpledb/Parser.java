@@ -235,7 +235,6 @@ public class Parser {
 
         Query sdbq = new Query(node, curtrans.getId());
         TupleDesc td = node.getTupleDesc();
-
         String names = "";
         for (int i = 0; i < td.numFields(); i ++) {
             names += td.getFieldName(i) + "\t";
@@ -247,6 +246,7 @@ public class Parser {
         System.out.println("");
         
         sdbq.start();
+        System.out.println("Started?");
         int cnt = 0;
         while (sdbq.hasNext()) {
             Tuple tup = sdbq.next();
@@ -449,7 +449,8 @@ public class Parser {
         "insert",
         "delete",
         "values",
-        "into"
+        "into",
+        "create index"
     };
 
     public static void main(String argv[]) throws IOException {

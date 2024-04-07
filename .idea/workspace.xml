@@ -1,10 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="17945db3-0f3b-4c19-af62-3c0f846af53b" name="Default Changelist" comment="" />
-    <ignored path="$PROJECT_DIR$/classes/" />
-    <ignored path="$PROJECT_DIR$/bin/" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <list default="true" id="17945db3-0f3b-4c19-af62-3c0f846af53b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/simpledb/IndexedFile.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/simpledb/IndexedFileEncoder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/simpledb/IndexedPage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/simpledb/IndexedPageId.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tableC.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/simpledb/IndexedFileReadTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/simpledb/IndexedPageIdTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/simpledb/IndexedPageReadTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/simpledb/BufferPool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/simpledb/BufferPool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/simpledb/DependencyGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/simpledb/DependencyGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/simpledb/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/simpledb/Field.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/simpledb/HeapFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/simpledb/HeapFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/simpledb/HeapPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/simpledb/HeapPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/simpledb/Join.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/simpledb/Join.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/simpledb/LogicalJoinNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/simpledb/LogicalJoinNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/simpledb/LogicalPlan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/simpledb/LogicalPlan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/simpledb/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/simpledb/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/simpledb/Predicate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/simpledb/Predicate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/simpledb/Utility.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/simpledb/Utility.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/simpledb/systemtest/SystemTestUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/simpledb/systemtest/SystemTestUtil.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -122,6 +145,13 @@
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="FindInProjectRecents">
     <findStrings>
       <find>system.out</find>
@@ -132,6 +162,9 @@
       <find>createRandomHeapFile</find>
       <find>printstack</find>
     </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -151,10 +184,20 @@
       </list>
     </option>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectFrameBounds" fullScreen="true">
     <option name="width" value="1680" />
     <option name="height" value="1050" />
   </component>
+  <component name="ProjectId" id="2eN59KCU586vPvzqnEa2Q0JmCAu" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -191,23 +234,32 @@
       <pane id="PackagesPane" />
     </panes>
   </component>
-  <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.All in simple_db.executor": "Run",
+    "JUnit.IndexedFileReadTest.testIteratorBasic.executor": "Run",
+    "JUnit.IndexedFileReadTest.testIteratorClose.executor": "Run",
+    "JUnit.IndexedPageIdTest.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/simon/Desktop/CS541Proj/simpledb"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="simpledb" />
+    </key>
   </component>
-  <component name="RunManager" selected="JUnit.All in simple_db">
+  <component name="RunManager" selected="JUnit.IndexedFileReadTest.testIteratorClose">
     <configuration name="All in simple_db" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="simple_db" />
       <option name="PACKAGE_NAME" value="" />
@@ -216,38 +268,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ScanTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="simple_db" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="simpledb.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="simpledb.systemtest" />
-      <option name="MAIN_CLASS_NAME" value="simpledb.systemtest.ScanTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ScanTest.testSmall" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="simple_db" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="simpledb.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="simpledb.systemtest" />
-      <option name="MAIN_CLASS_NAME" value="simpledb.systemtest.ScanTest" />
-      <option name="METHOD_NAME" value="testSmall" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="simpledb in simple_db" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="IndexedFileReadTest.testIteratorBasic" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="simple_db" />
       <extension name="coverage">
         <pattern>
@@ -256,7 +277,40 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="simpledb" />
-      <option name="TEST_OBJECT" value="package" />
+      <option name="MAIN_CLASS_NAME" value="simpledb.IndexedFileReadTest" />
+      <option name="METHOD_NAME" value="testIteratorBasic" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IndexedFileReadTest.testIteratorClose" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="simple_db" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="simpledb.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="simpledb" />
+      <option name="MAIN_CLASS_NAME" value="simpledb.IndexedFileReadTest" />
+      <option name="METHOD_NAME" value="testIteratorClose" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IndexedPageIdTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="simple_db" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="simpledb.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="simpledb" />
+      <option name="MAIN_CLASS_NAME" value="simpledb.IndexedPageIdTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -277,11 +331,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.IndexedFileReadTest.testIteratorClose" />
+        <item itemvalue="JUnit.IndexedFileReadTest.testIteratorBasic" />
+        <item itemvalue="JUnit.IndexedPageIdTest" />
         <item itemvalue="JUnit.All in simple_db" />
         <item itemvalue="JUnit.simpledb.systemtest in simple_db" />
-        <item itemvalue="JUnit.simpledb in simple_db" />
-        <item itemvalue="JUnit.ScanTest" />
-        <item itemvalue="JUnit.ScanTest.testSmall" />
       </list>
     </recent_temporary>
   </component>
@@ -292,6 +346,14 @@
       </map>
     </option>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-1.8.0_402-corretto-1.8.0_402-3183f394aec4-8ce719b4" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -368,6 +430,55 @@
       <window_info anchor="right" id="Capture Analysis" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
     </layout>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/test/simpledb/IndexedFileReadTest.java</url>
+          <line>95</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/test/simpledb/IndexedFileReadTest.java</url>
+          <line>96</line>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/test/simpledb/IndexedFileReadTest.java</url>
+          <line>97</line>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/simpledb/IndexedFile.java</url>
+          <line>293</line>
+          <option name="timeStamp" value="83" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/simpledb/IndexedFile.java</url>
+          <line>243</line>
+          <option name="timeStamp" value="85" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/simpledb/IndexedFile.java</url>
+          <line>300</line>
+          <properties class="simpledb.IndexedFile" method="bTreeInsert">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="80" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/simpledb/IndexedFile.java</url>
+          <line>196</line>
+          <properties class="simpledb.IndexedFile" method="splitPage">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="81" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/simpledb/Page.java">

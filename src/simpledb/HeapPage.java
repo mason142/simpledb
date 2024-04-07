@@ -230,6 +230,11 @@ public class HeapPage implements Page {
         return new byte[len]; //all 0
     }
 
+    public Tuple tupleSeek(int slot) {
+        assert getSlot(slot);
+        return tuples[slot];
+    }
+
     /**
      * Delete the specified tuple from the page;  the tuple should be updated to reflect
      *   that it is no longer stored on any page.

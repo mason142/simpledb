@@ -1,7 +1,5 @@
 package simpledb;
 
-import javafx.util.Pair;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;

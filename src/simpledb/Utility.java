@@ -149,6 +149,19 @@ public class Utility {
         return hf;
     }
 
+    public static IndexedFile openIndexedFiled(HeapFile hf) {
+        File temp = null;
+        try {
+            temp = File.createTempFile("newtable", ".dat");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        IndexedFile smallIndexedFile = new IndexedFile(temp, hf.getTupleDesc().getType(0), hf, 0);
+        String tableName = UUID.randomUUID().toString();
+        Database.getCatalog().addTable(smallIndexedFile, tableName);
+        return smallIndexedFile;
+    }
+
     public static String listToString(ArrayList<Integer> list) {
         String out = "";
         for (Integer i : list) {
