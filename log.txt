@@ -1,0 +1,4 @@
+Buildfile: /Users/simon/Desktop/CS541Proj/simpledb/build.xml
+
+clean:
+   [delete] Deleting directory /Users/simon/Desktop/CS541Proj/simpledb/bin

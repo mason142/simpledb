@@ -140,8 +140,14 @@ public class Join extends AbstractDbIterator {
      * @see JoinPredicate#filter
      */
     protected Tuple readNext() throws TransactionAbortedException, DbException {
-        if(jp.getOp() == Predicate.Op.EQUALS)
-            return readNextHashJoin();
+        Tuple t;
+        assert(false);
+        if (jp.getOp() == Predicate.Op.EQUALS) {
+            t = readNextHashJoin();
+            System.out.println("Tuple : " + t);
+            assert false;
+            return t;
+        }
         else
             return readNextBruteForce();
     }

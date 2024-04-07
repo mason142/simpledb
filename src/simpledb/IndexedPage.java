@@ -1,0 +1,468 @@
+package simpledb;
+
+import java.util.*;
+import java.io.*;
+
+/**
+ * IndexedPage stores pages of IndexedFiles and implements the Page interface that
+ * is used by BufferPool.
+ *
+ * @see IndexedFile
+ * @see BufferPool
+ */
+public class IndexedPage implements Page {
+
+    private final int numberOfExtraPointers = 5;
+    private final int pointerSizeBytes = 4;
+    IndexedPageId pid;
+    //TupleDesc td;
+    int nextPointer;
+    int prevPointer;
+    int parentPointer;
+    int indexedColumnPointer;
+    LinkedList<Field> tuples;
+    LinkedList<Integer> leafPointers;
+    int numSlots;
+    TransactionId dirtier;
+    boolean isLeaf;
+    IndexedPageId nextId;
+    IndexedPageId prevId;
+    IndexedPageId parentId;
+    byte[] oldData;
+    int indexedColumn;
+    int tuplesFilled;
+    boolean isRoot;
+
+    Type type;
+
+    /**
+     * Create a IndexedPage from a set of bytes of data read from disk.
+     * The format of a IndexedPage is a set of header bytes indicating
+     * the slots of the page that are in use, some number of tuple slots.
+     *  Specifically, the number of tuples is equal to: <p>
+     *          floor((BufferPool.PAGE_SIZE*8) / (tuple size * 8 + 1))
+     * <p> where tuple size is the size of tuples in this
+     * database table, which can be determined via {@link Catalog#getTupleDesc}.
+     * The number of 8-bit header words is equal to:
+     * <p>
+     *      ceiling(no. tuple slots / 8)
+     * <p>
+     * @throws Exception
+     * @see Database#getCatalog
+     * @see Catalog#getTupleDesc
+     * @see BufferPool#PAGE_SIZE
+     */
+    public IndexedPage(IndexedPageId id, byte[] data, Type type, boolean isRoot) throws IOException {
+        this.pid = id;
+        this.type = type;
+        this.numSlots = getNumTuples();
+        this.oldData = new byte[BufferPool.PAGE_SIZE];
+
+
+        DataInputStream dis = new DataInputStream(new ByteArrayInputStream(data));
+
+        // allocate and read the header slots of this page
+        this.isLeaf = dis.readBoolean();
+        this.isRoot = dis.readBoolean();
+        if (isRoot) {
+            this.isRoot = true;
+            this.isLeaf = true;
+        }
+
+        tuplesFilled = dis.readInt();
+        indexedColumnPointer = dis.readInt();
+        prevPointer = dis.readInt();
+        nextPointer = dis.readInt();
+        parentPointer = dis.readInt();
+        nextId = new IndexedPageId(pid.getTableId(), nextPointer);
+        prevId = new IndexedPageId(pid.getTableId(), prevPointer);
+        parentId = new IndexedPageId(pid.getTableId(), parentPointer);
+
+        try{
+            // allocate and read the actual records of this page
+            tuples = new LinkedList<>();
+            leafPointers = new LinkedList<>();
+            for (int i=0; i<tuplesFilled; i++) {
+                leafPointers.add(readNextLeafPointer(dis, i));
+                tuples.add(readNextTuple(dis, i));
+            }
+            if (!isLeaf) {
+                leafPointers.add(readNextLeafPointer(dis, tuplesFilled));
+            }
+        }catch(NoSuchElementException e){
+            e.printStackTrace();
+        }
+
+        this.indexedColumn = 0;
+
+        dis.close();
+
+        setBeforeImage();
+    }
+/*
+    public IndexedPage(IndexedPageId id, Field[] tups, int[] pointers, int next, int prev, int parent,
+                       boolean nodeIsLeaf, int indexedColumn) throws DbException {
+        this.pid = id;
+        //this.td = Database.getCatalog().getTupleDesc(id.getTableId());
+        this.numSlots = getNumTuples();
+        this.oldData = new byte[BufferPool.PAGE_SIZE];
+        prevPointer = new byte[pointerSizeBytes];
+        nextPointer = new byte[pointerSizeBytes];
+        parentPointer = new byte[pointerSizeBytes];
+        nextId = new IndexedPageId(pid.getTableId(), next);
+        prevId = new IndexedPageId(pid.getTableId(), prev);
+        parentId = new IndexedPageId(pid.getTableId(), parent);
+        isLeaf =  (nodeIsLeaf) ? (byte)1 : (byte)0;
+        this.indexedColumn = indexedColumn;
+        setTuplesAndPointers(tups, pointers);
+        setBeforeImage();
+    }
+*/
+    private int readNextLeafPointer(DataInputStream dis, int slotId) {
+        int leafPointer;
+            try {
+                leafPointer = dis.readInt();
+            } catch (IOException e) {
+                throw new NoSuchElementException("error reading first pointer");
+            }
+        return leafPointer;
+    }
+
+    /**
+     * Suck up tuples from the source file.
+     * @throws Exception
+     */
+    private Field readNextTuple(DataInputStream dis, int slotId) {
+        try {
+            return type.parse(dis);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            throw new NoSuchElementException("parsing error!");
+        }
+    }
+
+    /**
+     * Generates a byte array representing the contents of this page.
+     * Used to serialize this page to disk.
+     * <p>
+     * The invariant here is that it should be possible to pass the byte
+     * array generated by getPageData to the IndexedPage constructor and
+     * have it produce an identical IndexedPage object.
+     *
+     * @see #IndexedPage
+     * @return A byte array correspond to the bytes of this page.
+     * @throws Exception
+     */
+    public byte[] getPageData() {
+        int len = BufferPool.PAGE_SIZE;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(len);
+        DataOutputStream dos = new DataOutputStream(baos);
+
+        // create the header of the page
+        try {
+            dos.writeBoolean(isLeaf);
+            dos.writeBoolean(isRoot);
+            dos.writeInt(tuples.size());
+            dos.writeInt(indexedColumn);
+            dos.writeInt(prevId.pageno());
+            dos.writeInt(nextId.pageno());
+            dos.writeInt(parentId.pageno());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Iterator<Field> tupIterator = tuples.iterator();
+        Iterator<Integer> leafIterator = leafPointers.iterator();
+
+        if (!isLeaf()) {
+            try {
+                if (leafIterator.hasNext()) {
+                    dos.writeInt(leafIterator.next());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // create the tuples
+        while(tupIterator.hasNext()) {
+            // non-empty slot
+            Field f = tupIterator.next();
+            try {
+                f.serialize(dos);
+                dos.writeInt(leafIterator.next());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // padding
+        int zeroLen = BufferPool.PAGE_SIZE - (2 + 6 * pointerSizeBytes +
+                (type.getLen() + pointerSizeBytes) * tuples.size()); //- I hope this calculation is correct (Magic numbers)
+        byte[] zeroes = new byte[zeroLen];
+        try {
+            dos.write(zeroes, 0, zeroLen);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            dos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return baos.toByteArray();
+    }
+
+    /**
+     * Static method to generate a byte array corresponding to an empty
+     * IndexedPage.
+     * Used to add new, empty pages to the file. Passing the results of
+     * this method to the IndexedPage constructor will create a IndexedPage with
+     * no valid tuples in it
+     * .
+     * @return The returned ByteArray.
+     */
+    public static byte[] createEmptyPageData() {
+        int len = BufferPool.PAGE_SIZE;
+        return new byte[len]; //all 0
+    }
+
+    public int findLeftMostPageNo() throws DbException {
+        if (isLeaf)
+            throw new DbException("Page is leaf");
+        return leafPointers.get(0);
+    }
+    public int findChildPageNo(Field f) throws DbException {
+        if (isLeaf)
+            throw new DbException("Page is leaf");
+        int i = 0;
+        while (i < tuples.size() &&
+                tuples.get(i).compare(Predicate.Op.LESS_THAN, f)) {
+            i++;
+        }
+        return leafPointers.get(i);
+    }
+
+    /**
+     * Delete the specified tuple from the page;  the tuple should be updated to reflect
+     *   that it is no longer stored on any page.
+     * @throws DbException if this tuple is not on this page, or tuple slot is
+     *         already empty.
+     * @param f The tuple to delete
+     */
+    public void deleteTuple(Field f) throws DbException {
+        if (!tuples.remove(f))
+            throw new DbException("Tuple not in linked list");
+    }
+
+    /**
+     * Adds the specified tuple to the page;  the tuple should be updated to reflect
+     *  that it is now stored on this page.
+     * @throws DbException if the page is full (no empty slots) or tupledesc
+     *         is mismatch.
+     * @param f The tuple to add.
+     */
+    public void addTuple(Field f, int pageNumber) throws DbException {
+        if (getNumEmptySlots() == 0)
+            throw new DbException("No space left on this page");
+
+        // find first empty slot
+        int index = 0;
+        while (index < tuples.size() &&
+                tuples.get(index).compare(Predicate.Op.LESS_THAN, f)) {
+            index++;
+        }
+        tuples.add(index, f);
+        leafPointers.add(index, pageNumber);
+    }
+
+    public Field getMiddleKey() {
+        return tuples.get((int) Math.ceil((double) numSlots / 2));
+    }
+
+    public Pair<Field[], int[]> getFirstHalf() {
+        int size = (int) Math.ceil((double) numSlots / 2);
+        Field[] half = new Field[size];
+        int[] pointers = new int[size+1];
+        Iterator<Field> ti = tuples.listIterator(0);
+        Iterator<Integer> li = leafPointers.listIterator(0);
+        for (int i = 0; i < size; i++) {
+            half[i] = ti.next();
+            pointers[i] = li.next();
+        }
+        if (!isLeaf) {
+            pointers[size] = leafPointers.get(size);
+        }
+        return new Pair<>(half, pointers);
+    }
+
+    public Pair<Field[], int[]> getSecondHalf() {
+        int middle = (int) Math.ceil((double) numSlots / 2);
+        int size = numSlots - middle;
+        Field[] half = new Field[size];
+        int[] pointers = new int[size + 1];
+        Iterator<Field> ti = tuples.listIterator(middle);
+        Iterator<Integer> li = leafPointers.listIterator(middle);
+        for (int i = middle; i < numSlots; i++) {
+            half[i - middle] = ti.next();
+            pointers[i-middle] = li.next();
+        }
+        if (!isLeaf) {
+            pointers[size] = li.next();
+        }
+        return new Pair<>(half, pointers);
+    }
+
+    public void setTuplesAndPointers(Field[] fields, int[] pointers) throws DbException{
+        tuples = new LinkedList<>();
+        leafPointers = new LinkedList<>();
+        Field tuple = fields[0];
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i].compare(Predicate.Op.LESS_THAN, tuple)) {
+                throw new DbException("Tuples not in order bad page");
+            }
+            tuples.add(fields[i]);
+            leafPointers.add(pointers[i]);
+        }
+        if (!isLeaf) {
+            leafPointers.add(pointers[fields.length]);
+        }
+    }
+
+    public boolean isLeaf() {
+        return isLeaf;
+    }
+
+    public void setIsLeaf(boolean isLeaf) {
+        this.isLeaf = isLeaf;
+    }
+
+    public boolean isRoot() {
+        return isRoot;
+    }
+    /**
+     * Marks this page as dirty/not dirty and record that transaction
+     * that did the dirtying
+     */
+    public void markDirty(boolean dirty, TransactionId tid) {
+        if(dirty)
+            dirtier = tid;
+        else
+            dirtier = null;
+    }
+
+    /**
+     * Returns the tid of the transaction that last dirtied this page, or null if the page is not dirty
+     */
+    public TransactionId isDirty() {
+        return dirtier;
+    }
+
+    public int getTupleLoc(Field field) throws DbException {
+        if (!isLeaf)
+            throw new DbException("Page is not leaf");
+        int i = 0;
+        while (i < tuples.size() &&
+                tuples.get(i).compare(Predicate.Op.NOT_EQUALS, field)) {
+            i++;
+        }
+        return i;
+    }
+
+    /**
+     * Returns the number of empty slots on this page.
+     */
+    public int getNumEmptySlots() {
+        return numSlots - tuples.size();
+    }
+
+    public int getNextId() {
+        return nextId.pageno();
+    }
+
+    public int getPrevId() {
+        return prevId.pageno();
+    }
+
+    public int getParentId() {
+        return parentId.pageno();
+    }
+
+    public void setNextId(int id) {
+        nextId = new IndexedPageId(nextId.getTableId(), id);
+    }
+
+    public void setPrevId(int id) {
+        prevId = new IndexedPageId(prevId.getTableId(), id);
+    }
+
+    public void setParentId(int id) {
+        parentId = new IndexedPageId(parentId.getTableId(), id);
+    }
+
+    public boolean isHalfFull() {
+        return (double) tuples.size() / getNumTuples() >= 0.5;
+    }
+    /** Retrieve the number of tuples on this page.
+     @return the number of tuples on this page
+     */
+    private int getNumTuples() {
+        int pointerSizeBits = 32;
+        int isLeafSpaceinBits = 8;
+        return (int) Math.floor((double) (BufferPool.PAGE_SIZE * 8 - 6*pointerSizeBits - 2*isLeafSpaceinBits) /
+                ((this.type.getLen() * 8 + pointerSizeBits)));
+    }
+
+    int fromByteArray(byte[] bytes) {
+        return ((bytes[0] & 0xFF) << 24) |
+                ((bytes[1] & 0xFF) << 16) |
+                ((bytes[2] & 0xFF) << 8 ) |
+                ((bytes[3] & 0xFF));
+    }
+
+    /** Return a view of this page before it was modified
+     -- used by recovery
+     * @throws Exception */
+    public IndexedPage getBeforeImage() {
+        try {
+            return new IndexedPage(pid,oldData,type,false);
+        } catch (IOException e) {
+            e.printStackTrace();
+            //should never happen -- we parsed it OK before!
+            System.exit(1);
+        }
+        return null;
+    }
+
+    public void setBeforeImage() {
+        try {
+            oldData = getPageData().clone();
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /**
+     * @return the PageId associated with this page.
+     */
+    public IndexedPageId getId() {
+        return pid;
+    }
+
+    /**
+     * @return an iterator over all tuples on this page (calling remove on this iterator throws an UnsupportedOperationException)
+     * (note that this iterator shouldn't return tuples in empty slots!)
+     */
+    public Iterator<Integer> iterator() {
+        return leafPointers.listIterator();
+    }
+
+    public Iterator<Integer> iterator(int slot) {
+        return leafPointers.listIterator(slot);
+    }
+
+}
+

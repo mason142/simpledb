@@ -330,16 +330,24 @@ public  class LogicalPlan {
         }
         
         JoinOptimizer jo = new JoinOptimizer(this,joins);
-
+        System.out.println("before:");
+        for (int i = 0; i < joins.size(); i++) {
+            System.out.println(joins.get(i));
+        }
         joins = jo.orderJoins(statsMap,filterSelectivities,explain);
 
         if(joins != null) {
+            System.out.println("After:");
+            for (int i = 0; i < joins.size(); i++) {
+                System.out.println(joins.get(i));
+            }
             Iterator<LogicalJoinNode> joinIt = joins.iterator();
             while (joinIt.hasNext()) {
                 LogicalJoinNode lj = joinIt.next();
                 DbIterator plan1;
                 DbIterator plan2;
                 boolean isSubqueryJoin = lj instanceof LogicalSubplanJoinNode;
+                System.out.println("Is subquery join? " + isSubqueryJoin);
                 String t1name, t2name;
 
                 if (equivMap.get(lj.t1)!=null)
@@ -461,7 +469,7 @@ public  class LogicalPlan {
         if (hasOrderBy) {
             node = new OrderBy(node.getTupleDesc().nameToId(disambiguateName(oByField)), oByAsc, node);
         }
-
+        System.out.println("Leaving");
         return new Project(outFields, outTypes, node);
     }
 

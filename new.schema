@@ -1,0 +1,3 @@
+tableA (id int, title int)
+tableB (id int, number int)
+tableC (id int, thing int)
